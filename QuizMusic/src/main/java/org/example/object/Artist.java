@@ -93,11 +93,11 @@ public class Artist {
                 '}';
     }
 
-    public void setWinningCondition(int winningCondition) {
+    public void setChosen(int winningCondition) {
         this.winningCondition = winningCondition;
     }
 
-    public int getWinningCondition() {
+    public int getChosen() {
         return winningCondition;
     }
 }

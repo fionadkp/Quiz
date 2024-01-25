@@ -26,13 +26,13 @@ public class MessagesService {
 
     public int getSolution(Scanner scanner, List<Artist> artists, int points) {
         String playerSolution = getPlayerSolution(scanner, artists);
-        Collections.sort(artists, Comparator.comparingInt(Artist::getWinningCondition).reversed());
+        Collections.sort(artists, Comparator.comparingInt(Artist::getChosen).reversed());
         Artist a = artists.get(artists.size() - 1);
-        String rightArtist = a.getName();
+        String chosenArtist = a.getName();
 
-        boolean equals = Objects.equals(playerSolution.toLowerCase(Locale.ROOT), rightArtist.toLowerCase(Locale.ROOT));
+        boolean equals = Objects.equals(playerSolution.toLowerCase(Locale.ROOT), chosenArtist.toLowerCase(Locale.ROOT));
         System.out.println(equals);
-        System.out.println(" - " + rightArtist);
+        System.out.println(" -> " + chosenArtist);
 
         if (equals) {
             points++;
@@ -61,7 +61,7 @@ public class MessagesService {
         String category;
         do {
             category = scanner.nextLine().toLowerCase(Locale.ROOT);
-        } while (!(category.equals("grammy") || category.equals("billboard")));
+        } while (!(category.equals("grammy") || category.equals("billboard") || category.equals("mtv") || category.equals("brits")));
         return category;
     }
 }

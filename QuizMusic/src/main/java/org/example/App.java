@@ -27,7 +27,7 @@ public class App {
             MessagesService messageService = new MessagesService();
             Scanner scanner = new Scanner(System.in);
 
-            String name = messageService.getAnswerToQuestion("Type in your username", scanner);
+            String name = messageService.getAnswerToQuestion("Type in your username:", scanner);
 
             long start = System.currentTimeMillis();
             run(questionService, scanner, musicService, messageService);

@@ -28,6 +28,8 @@ public class QuestionsService {
         System.out.println("Choose a Category:");
         System.out.println("- Billboard");
         System.out.println("- Grammy");
+        System.out.println("- MTV");
+        System.out.println("- Brits");
     }
 
     public List<Artist> getQuizQuestion(Question randomQuestion, MusicService musicService) {
@@ -52,7 +54,7 @@ public class QuestionsService {
         // MongoDB aggregation pipeline to retrieve questions for a given category
         List<Bson> pipeline = new ArrayList<>();
         pipeline.add(match(Filters.eq("category", category)));  // Assuming Filters.eq is used for equality
-        pipeline.add(sample(2));
+        pipeline.add(sample(4));
 
 
         AggregateIterable<Document> result = questionsCollection.aggregate(pipeline);
