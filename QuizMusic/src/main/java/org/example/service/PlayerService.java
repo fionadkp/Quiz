@@ -4,6 +4,8 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Sorts;
 import org.bson.Document;
 import org.example.object.Player;
 
@@ -19,22 +21,24 @@ public class PlayerService {
 
         try (MongoClient mongoClient = MongoClients.create(connectionString)) {
             MongoDatabase database = mongoClient.getDatabase("statistics");
-            MongoCollection<Document> collection = database.getCollection("playerStats");
+            MongoCollection<Document> collection = database.getCollection("playerStatistics");
 
-            List<Document> aggregation = Arrays.asList(
-                    new Document("$sort", new Document("points", -1).append("time", 1)),
-                    new Document("$limit", 5)
+            var aggregation = Arrays.asList(
+                    Aggregates.sort(
+                            Sorts.orderBy(
+                                    Sorts.descending("points"),
+                                    Sorts.ascending("time"))),
+                    Aggregates.limit(5)
             );
 
-            for (Document playerDocument : collection.aggregate(aggregation)) {
-                players.add(documentToPlayer(playerDocument));
-            }
-        } catch (Exception e) {
-            // Handle the exception, you can log it or print the stack trace
-            e.printStackTrace();
-            // You might want to throw a custom exception or handle it in a way that makes sense for your application
-        }
+            var cursor = collection.aggregate(aggregation).iterator();
 
+            while (cursor.hasNext()) {
+                Document playerDocument = cursor.next();
+
+                players.add(documentToPlayer(playerDocument)); // Converts BSON player to java
+            }
+        }
         return players;
     }
 

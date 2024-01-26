@@ -26,10 +26,10 @@ public class QuestionsService {
 
     public void makeQuestion() {
         System.out.println("Choose a Category:");
-        System.out.println("- Billboard");
-        System.out.println("- Grammy");
-        System.out.println("- MTV");
-        System.out.println("- Brits");
+        System.out.println("-> Billboard");
+        System.out.println("-> Grammy");
+        System.out.println("-> MTV");
+        System.out.println("-> Brits");
     }
 
     public List<Artist> getQuizQuestion(Question randomQuestion, MusicService musicService) {
