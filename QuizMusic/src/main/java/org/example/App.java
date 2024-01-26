@@ -42,10 +42,10 @@ public class App {
 
     private static void run(QuestionsService questionService, Scanner scanner, MusicService musicService, MessagesService messageService) {
         Random random = new Random();
-
+        questionService.makeQuestion();
+        String category = messageService.getCategory(scanner);
         for (int x = 0; x < 5; x++) {
-            questionService.makeQuestion();
-            String category = messageService.getCategory(scanner);
+
 
             List<Question> questions = questionService.getMusicQuestion(category);
             Question randomQuestion = questions.isEmpty() ? null : questions.get(random.nextInt(questions.size()));
