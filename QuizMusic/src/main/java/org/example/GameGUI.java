@@ -26,7 +26,7 @@ public class GameGUI {
     }
 
     public void displayHighscore(String name, double time, int points, List<Player> topPlayers) {
-        StringBuilder message = new StringBuilder("Congratulations " + name + "! You got " + points + " points in " + time + " seconds.\n\n");
+        StringBuilder message = new StringBuilder(name + " got " + points + " points in " + time + " seconds. That's Amazing!\n\n");
         message.append("Highscores:\n");
 
         for (Player player : topPlayers) {
