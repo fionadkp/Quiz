@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.GameGUI;
 import org.example.object.Artist;
 import org.example.object.Player;
 
@@ -7,13 +8,24 @@ import java.util.*;
 
 public class MessagesService {
 
-    public void endOfGameMsg(String name, double time, int points, PlayerService playerService) {
-        System.out.println("Congratulations " + name + "! You got " + points + " points in " + time + " seconds.");
+    private GameGUI gameGUI;
 
-        System.out.println("Highscores:");
+    public void setGameGUI(GameGUI gameGUI) {
+        this.gameGUI = gameGUI;
+    }
+
+    public void highscore(String name, double time, int points, PlayerService playerService) {
+        StringBuilder message = new StringBuilder(name + " got " + points + " points in " + time + " seconds. That's Amazing!\n\n");
+        message.append("Highscores:\n");
 
         for (Player player : playerService.getTopPlayers()) {
-            System.out.println(player.getPlayerName() + ": " + player.getPoints() + " Points. Time:" + player.getTime() + " s");
+            message.append(player.getPlayerName()).append(": ").append(player.getPoints()).append(" Points. Time:").append(player.getTime()).append(" s\n");
+        }
+
+        System.out.println(message.toString());
+
+        if (gameGUI != null) {
+            gameGUI.displayHighscore(name, time, points, playerService.getTopPlayers());
         }
     }
 

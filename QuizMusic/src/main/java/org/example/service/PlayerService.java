@@ -36,7 +36,7 @@ public class PlayerService {
             while (cursor.hasNext()) {
                 Document playerDocument = cursor.next();
 
-                players.add(documentToPlayer(playerDocument)); // Converts BSON player to java
+                players.add(documentToPlayer(playerDocument));
             }
         }
         return players;

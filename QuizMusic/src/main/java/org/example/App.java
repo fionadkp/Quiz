@@ -26,8 +26,10 @@ public class App {
             PlayerService playerService = new PlayerService();
             MessagesService messageService = new MessagesService();
             Scanner scanner = new Scanner(System.in);
+            GameGUI gameGUI = new GameGUI();
+            messageService.setGameGUI(gameGUI);
 
-            String name = messageService.getAnswerToQuestion("Type in your username:", scanner);
+            String name = messageService.getAnswerToQuestion("Type in your username", scanner);
 
             long start = System.currentTimeMillis();
             run(questionService, scanner, musicService, messageService);
@@ -36,7 +38,7 @@ public class App {
             double time = (double) (finish - start) / 1000;
             sdb.saveWinLog(name, points, time);
 
-            messageService.endOfGameMsg(name, time, points, playerService);
+            messageService.highscore(name, time, points, playerService);
         }
     }
 

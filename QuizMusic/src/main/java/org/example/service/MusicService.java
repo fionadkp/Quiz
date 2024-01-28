@@ -8,47 +8,42 @@ import com.mongodb.client.model.Aggregates;
 import org.bson.Document;
 import org.example.object.Artist;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 public class MusicService {
 
+    private Set<String> uniqueArtistNames = new HashSet<>();
+
     public List<Artist> getAllArtists(int value, String category) {
 
-        List<Artist> artists = new ArrayList<>(); // All artists in the list
+        List<Artist> artists = new ArrayList<>();
 
-        String connectionString = "mongodb+srv://root:root@quiz.hio3wxv.mongodb.net/?retryWrites=true&w=majority"; // Connection String
+        String connectionString = "mongodb+srv://root:root@quiz.hio3wxv.mongodb.net/?retryWrites=true&w=majority";
 
         try (MongoClient mongoClient = MongoClients.create(connectionString)) {
             MongoDatabase database = mongoClient.getDatabase("statistics");
             MongoCollection<Document> collection = database.getCollection("artists");
 
-            for (int x = 0; x < 3; ) { // loops 3 times
+            for (int x = 0; x < 3; ) {
                 Document sampleStage = new Document("$sample", new Document("size", 1));
-                var aggregation = List.of(sampleStage); // One random artist
+                var aggregation = List.of(sampleStage);
                 var cursor = collection.aggregate(aggregation).iterator();
-                while (cursor.hasNext() && x < 3) { // Check x < 3 here
+                while (cursor.hasNext() && x < 3) {
                     Document artistDocument = cursor.next();
-                    Artist currentArtist = documentToArtist(artistDocument); // Convert Document to java object
+                    Artist currentArtist = documentToArtist(artistDocument);
 
-                    // Check if artist has non-null and non-zero values
-//                    if (isValidArtist(currentArtist, category))
+                    if (isValidArtist(currentArtist, category) && !uniqueArtistNames.contains(currentArtist.getName()))
                     {
-                        currentArtist.setChosen(Math.abs(value - getArtistValue(currentArtist, category))); // Sets winning condition to artist object
+                        currentArtist.setChosen(Math.abs(value - getArtistValue(currentArtist, category)));
 
-                        // Check if the chosen value already exists in the l
                         artists.add(currentArtist);
+                        uniqueArtistNames.add(currentArtist.getName());
                         x++;
                     }
-//                    } else {
-//                        continue;
-//                    }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Handle or log the exception
+            e.printStackTrace();
         }
 
         return artists;
@@ -67,26 +62,26 @@ public class MusicService {
         return artist;
     }
 
-//    private boolean isValidArtist(Artist artist, String category) {
-//        switch (category.toLowerCase(Locale.ROOT)) {
-//            case "grammys":
-//                return artist.getGrammys() != 0;
-//            case "mtv":
-//                return artist.getMtv() != 0;
-//            case "billboard":
-//                return artist.getBillboard() != 0;
-//            case "amas":
-//                return artist.getAmas() != 0;
-//            case "vmas":
-//                return artist.getVmas() != 0;
-//            case "emas":
-//                return artist.getEmas() != 0;
-//            case "brits":
-//                return artist.getBrits() != 0;
-//            default:
-//                return false;
-//        }
-//    }
+    private boolean isValidArtist(Artist artist, String category) {
+        switch (category.toLowerCase(Locale.ROOT)) {
+            case "grammys":
+                return artist.getGrammys() != 0;
+            case "mtv":
+                return artist.getMtv() != 0;
+            case "billboard":
+                return artist.getBillboard() != 0;
+            case "amas":
+                return artist.getAmas() != 0;
+            case "vmas":
+                return artist.getVmas() != 0;
+            case "emas":
+                return artist.getEmas() != 0;
+            case "brits":
+                return artist.getBrits() != 0;
+            default:
+                return false;
+        }
+    }
 
 
     public int getArtistValue(Artist currentArtist, String category) {
@@ -105,8 +100,7 @@ public class MusicService {
         } else if ("Brits".equals(category)) {
             return currentArtist.getBrits();
         } else {
-            // Handle unknown category
-            return 0; // You can change this according to your logic
+            return 0;
         }
     }
 
